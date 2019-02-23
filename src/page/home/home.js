@@ -19,7 +19,7 @@ class home extends Component {
   }
   
   componentWillMount() {
-    API.getPageData()
+    console.log("首页",this.props)
   }
   render() {
     let { carouselImg } = this.state
@@ -35,7 +35,7 @@ class home extends Component {
           <div className="user">
             <img src={require("../../assets/image/user.svg")} alt=""/>
           </div>
-        </div>
+        </div> 
         <Carousel 
           className="my-carousel"
           dots={true}
