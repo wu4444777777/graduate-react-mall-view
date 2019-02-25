@@ -9,6 +9,7 @@ import login from './page/login/login'
 import register from './page/register/register'
 import shoppingCart from './page/shoppingCart/shoppingCart'
 import search from './page/search/search'
+import productDetail from './page/productDetail/productDetail'
 // var routerList = [{
 //   path: '/',
 //   componentPath: home,
@@ -39,13 +40,14 @@ class RouteConfig extends Component {
     return (
       <HashRouter>
         <Switch>
-          <Route path="/" exact component= {home} onEnter={()=> document.title ="首页"}/>
-          <Route path="/personalCenter" component={personalCenter} onEnter={()=> document.title ="个人中心"}/>
+          <Route path="/" exact component= {home} onEnter={(nextState,replaceState)=> console.log("路由",nextState)}/>
+          <Route path="/personalCenter" component={personalCenter} onEnter={(nextState,replaceState)=> console.log("路由",nextState)}/>
           <Route path="/accountManage" component={accountManage} onEnter={()=> document.title ="账号管理"} />
           <Route path="/login" component={login} onEnter={()=> document.title= "登录"}/>
           <Route path="/register" component={register} onEnter={document.title= "注册"}/>
           <Route path="/shoppingCart" component={shoppingCart}/>
           <Route path="/search" component={search}/>
+          <Route path="/productDetail/:id" component={productDetail}/>
         </Switch>
       </HashRouter>
     )

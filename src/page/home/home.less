@@ -57,6 +57,7 @@
     }
   }
   .hot-recommend{
+    margin-bottom: 50px;
     .hr-title{
       background: lightpink;
       padding: 10px;
@@ -64,6 +65,44 @@
       color: white;
       font-weight: bold;
       font-size: 18px;
+    }
+    .hr-list{
+      padding: 10px;
+      .hr-detail{
+        display: inline-block;
+        width: 46%;
+        margin: 2%;
+        background: white;
+        border-radius: 10px;
+        .product-img{
+          padding: 10px;
+          img{
+            width: 100%;
+          }
+        }
+        .name{
+          padding: 0 10px;
+          font-weight: bold;
+          font-size: 12px;
+        }
+        .pd-price{
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 10px;
+          align-items: center;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          .price{
+            color: red;
+            margin: 0;
+          }
+          img{
+            width: 25%;
+            height: 28px;
+          }
+        }
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react';
 import { Carousel, Flex } from 'antd-mobile'
 import BottomBar from '../common/bottomBar/bottomBar'
@@ -19,10 +20,16 @@ class home extends Component {
   }
   
   componentWillMount() {
+    API.getPageData()
     console.log("首页",this.props)
+  }
+
+  url(path) {
+    this.props.history.push(path)
   }
   render() {
     let { carouselImg } = this.state
+    let { product } = toJS(API.state)
     return (
       <div className="home">
         <div className="nav-bar">
@@ -89,20 +96,20 @@ class home extends Component {
         <div className="hot-recommend">
           <div className="hr-title">精彩推荐</div>
           <div className="hr-list">
-            <div className="hr-detail">
-              <img src="" alt=""/>
-              <div>
-                <p className="price"></p>
-                <img src="" alt=""/>
-              </div>
-            </div>
-            <div className="hr-detail">
-              <img src="" alt=""/>
-              <div>
-                <p className="price"></p>
-                <img src="" alt=""/>
-              </div>
-            </div>
+            {
+              product && product.length>0 && product.map((item,index) => (
+                <div className="hr-detail" key={index}>
+                  <div className="product-img" onClick={()=>{this.url("/productDetail/"+item.id)}}>
+                    <img src={require("../../assets/image/"+item.image)} alt=""/>
+                  </div>
+                  <div className="name" onClick={()=>{this.url("/productDetail/"+item.id)}}>{item.name}</div>
+                  <div className="pd-price">
+                    <p className="price">￥{item.price}</p>
+                    <img src={require("../../assets/image/save.svg")} alt=""/>
+                  </div>
+                </div>
+              ))
+            }
           </div>  
         </div>
         <BottomBar/>

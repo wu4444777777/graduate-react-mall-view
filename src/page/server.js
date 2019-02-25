@@ -2,9 +2,9 @@ import {observable,action,runInAction} from 'mobx';
 import axios from 'axios'
 
 class API {
-
-    @observable state = {
-        info: {},
+  // @observable
+    @observable  state = {
+        product: {},
         loginout: false
     }
 
@@ -12,11 +12,16 @@ class API {
     async getPageData() {
         let { data } = await axios.get('http://localhost:4530/page/getData');
         runInAction(() => {
-            this.state.info = data;
-            console.log("获取到的数据",data)
+            this.state.product = data.data;
         })
         return data
+    }
 
+    @action
+    async getDetailData(params) {
+      let { data } = await axios.get('http://localhost:4530/page/sendDetail',params)
+
+      return data
     }
 
 }

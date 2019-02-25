@@ -24,8 +24,8 @@ class login extends Component {
               <input className="btn" type="submit"/>
               <input className="btn" type="reset"/>
               <div className="forget">
-                <a href="#">忘记密码？</a>
-                <a href="register">注册</a>
+                <a href="/">忘记密码？</a>
+                <a href="/register">注册</a>
               </div>
             </form>
           </div>
