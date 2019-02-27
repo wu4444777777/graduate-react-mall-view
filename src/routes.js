@@ -34,17 +34,16 @@ class RouteConfig extends Component {
   }
 
   componentWillMount() {
-    console.log("参数",this.props)
   }
   render () {
     return (
       <HashRouter>
         <Switch>
-          <Route path="/" exact component= {home} onEnter={(nextState,replaceState)=> console.log("路由",nextState)}/>
-          <Route path="/personalCenter" component={personalCenter} onEnter={(nextState,replaceState)=> console.log("路由",nextState)}/>
-          <Route path="/accountManage" component={accountManage} onEnter={()=> document.title ="账号管理"} />
-          <Route path="/login" component={login} onEnter={()=> document.title= "登录"}/>
-          <Route path="/register" component={register} onEnter={document.title= "注册"}/>
+          <Route path="/" exact component= {home}/>
+          <Route path="/personalCenter" component={personalCenter}/>
+          <Route path="/accountManage" component={accountManage} />
+          <Route path="/login" component={login}/>
+          <Route path="/register" component={register}/>
           <Route path="/shoppingCart" component={shoppingCart}/>
           <Route path="/search" component={search}/>
           <Route path="/productDetail/:id" component={productDetail}/>

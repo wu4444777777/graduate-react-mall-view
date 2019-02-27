@@ -48,7 +48,7 @@ class shoppingCart extends Component{
           </div>
         </CheckboxItem>
       </div>
-      <div className="account">
+      <div className="count">
         
       </div>
       </div>

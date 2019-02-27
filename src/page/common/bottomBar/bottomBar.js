@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react'
-import { Flex } from 'antd-mobile'
+import { Flex, Toast } from 'antd-mobile'
 import { Link } from 'react-router-dom'
 import './bottomBar.less'
 
@@ -15,6 +15,16 @@ class bottomBar extends Component {
 
   componentWillMount(){
     console.log("底部",this.props)
+  }
+
+  checkIsLogin(e) {
+    let userFlag = localStorage.getItem("userFlag")
+    if(userFlag != 1) {
+      e.preventDefault()
+      Toast.info("请先登录",5,()=>{
+        this.props.props.history.push("/login")
+      })
+    }
   }
 
   render() {
@@ -40,7 +50,7 @@ class bottomBar extends Component {
             </Link>
           </Flex.Item>
           <Flex.Item>
-            <Link to='/personalCenter'>
+            <Link to='/personalCenter' onClick={this.checkIsLogin.bind(this)}>
               <img src={require("../../../assets/image/my.png")} alt=""/>
               <p>我的</p>
             </Link>

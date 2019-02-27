@@ -20,6 +20,7 @@ class home extends Component {
   }
   
   componentWillMount() {
+    document.title = "首页"
     API.getPageData()
     console.log("首页",this.props)
   }
@@ -112,7 +113,7 @@ class home extends Component {
             }
           </div>  
         </div>
-        <BottomBar/>
+        <BottomBar props={this.props}/>
       </div>
     );
   }

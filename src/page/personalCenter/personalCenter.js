@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import BottomBar from '../common/bottomBar/bottomBar'
-import { Grid } from 'antd-mobile'
-// import API from '../../page/server';
+import { Grid, Toast } from 'antd-mobile'
+import API from '../server';
 import './personalCenter.less';
 
 @observer
@@ -28,22 +28,53 @@ class personalCenter extends Component {
   }
   
   componentWillMount() {
-    console.log("个人中心的参数",this.props)
+    document.title = "个人中心"
+    let userFlag = localStorage.getItem("userFlag")
+    let userphone = localStorage.getItem("userInfo")
+    if(userFlag == 1) {
+      if(userphone) {
+        API.getUserInfo({
+          params: {
+            phone: userphone
+          }
+        }).then(data => {
+          this.setState({
+            userInfo: data
+          })
+          console.log("data===>",data)
+        })
+      }
+    }else{
+      Toast.info("请先登录",5,()=>{
+        this.url("/login")
+      })
+    }
   }
 
   url(path){
-    this.props.history.push("/accountManage")
+    this.props.history.push(path)
+  }
+
+  checkIsLogin() {
+    let loginFlag = localStorage.getItem("userFlag")
+    if(loginFlag == 1) {
+      this.url("/accountManage")
+    }else{
+      Toast.info("请先登录",5,()=>{
+        this.url("/login")
+      })
+    }
   }
   render() {
-    let { iconData } = this.state
+    let { iconData, userInfo } = this.state
     return (
       <div className="personalCenter">
         <div className="user">
-            <div className="user-logo" onClick={()=>{this.url("/accountManage")}}>
+            <div className="user-logo" onClick={()=>{this.checkIsLogin()}}>
               <img src={require("../../assets/image/user.svg")} alt=""/>
             </div>
-           <div className="nickName">hello</div>
-           <div className="account">18148789170</div>
+           <div className="nickName">{userInfo && userInfo.username}</div>
+           <div className="account">{userInfo && userInfo.phone}</div>
         </div>
         <div className="myOrder">
           <div className="title">
