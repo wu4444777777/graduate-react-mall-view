@@ -10,6 +10,7 @@ import register from './page/register/register'
 import shoppingCart from './page/shoppingCart/shoppingCart'
 import search from './page/search/search'
 import productDetail from './page/productDetail/productDetail'
+import order from './page/order/order'
 // var routerList = [{
 //   path: '/',
 //   componentPath: home,
@@ -47,6 +48,7 @@ class RouteConfig extends Component {
           <Route path="/shoppingCart" component={shoppingCart}/>
           <Route path="/search" component={search}/>
           <Route path="/productDetail/:id" component={productDetail}/>
+          <Route path="/order" component={order}/>
         </Switch>
       </HashRouter>
     )

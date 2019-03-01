@@ -17,7 +17,6 @@ class accountManage extends Component {
   componentWillMount() {
     document.title = "账号管理"
     let userphone = localStorage.getItem("userInfo")
-    console.log("userphone",userphone)
     if(userphone) {
       API.getUserInfo({
         params: {
@@ -27,7 +26,6 @@ class accountManage extends Component {
         this.setState({
           userInfo: data
         })
-        console.log("data===>",data)
       })
     }
   }

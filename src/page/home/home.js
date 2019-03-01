@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react';
-import { Carousel, Flex } from 'antd-mobile'
+import { Carousel, Flex, Toast } from 'antd-mobile'
 import BottomBar from '../common/bottomBar/bottomBar'
 import API from '../../page/server';
 import './home.less';
@@ -15,19 +15,43 @@ class home extends Component {
         require("../../assets/image/1.jpg"),
         require("../../assets/image/2.jpg"),
         require("../../assets/image/3.jpg")
-      ]
+      ],
+      loginStatus: 0,
     }
   }
   
   componentWillMount() {
+    let { loginStatus } = this.state
     document.title = "首页"
     API.getPageData()
+    if(loginStatus == 1) {
+      this.setState({
+        loginStatus: 1
+      })
+    }else{
+      this.setState({
+        loginStatus: 0
+      })
+    }
     console.log("首页",this.props)
   }
 
   url(path) {
     this.props.history.push(path)
   }
+
+  saveProduct(data) {
+    API.saveProductRecord({
+      ...data
+    }).then((res) =>{
+      if(res.resultCode == 0) {
+        Toast.success(res.resultMsg)
+      }else{
+        Toast.info(res.resultMsg)
+      }
+    })
+  }
+
   render() {
     let { carouselImg } = this.state
     let { product } = toJS(API.state)
@@ -106,7 +130,7 @@ class home extends Component {
                   <div className="name" onClick={()=>{this.url("/productDetail/"+item.id)}}>{item.name}</div>
                   <div className="pd-price">
                     <p className="price">￥{item.price}</p>
-                    <img src={require("../../assets/image/save.svg")} alt=""/>
+                    <img src={require("../../assets/image/save.svg")} onClick={()=>this.saveProduct(item)} alt=""/>
                   </div>
                 </div>
               ))

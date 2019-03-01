@@ -21,7 +21,7 @@ class login extends Component {
       ...this.state.loginData
     }).then((data)=>{
       if(data.resultCode === 0){
-        Toast.success(data.resultMsg,5,()=> {
+        Toast.success(data.resultMsg,3,()=> {
           localStorage.setItem("userInfo", data.data.phone)
           localStorage.setItem("userFlag","1")
           this.props.history.push("/")

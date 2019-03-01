@@ -9,17 +9,26 @@ class bottomBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      loginStatus: 0,//登录状态，0未登录，1已登录
     };
   }
 
   componentWillMount(){
-    console.log("底部",this.props)
+    let userFlag = localStorage.getItem("userFlag")
+    if(userFlag == 1){
+      this.setState({
+        loginStatus: 1
+      })
+    }else{
+      this.setState({
+        loginStatus: 0
+      })
+    }
   }
 
   checkIsLogin(e) {
-    let userFlag = localStorage.getItem("userFlag")
-    if(userFlag != 1) {
+    let { loginStatus } = this.state
+    if(loginStatus != 1) {
       e.preventDefault()
       Toast.info("请先登录",5,()=>{
         this.props.props.history.push("/login")
