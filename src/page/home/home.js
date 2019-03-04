@@ -82,19 +82,19 @@ class home extends Component {
         </Carousel>
         <div className="disparture">
           <Flex>
-            <Flex.Item>
+            <Flex.Item onClick={this.url.bind(this,"/classify/coffee")}>
               <img src={require("../../assets/image/part-cloth.png")} alt=""/>
               <p>衣服</p>
             </Flex.Item>
-            <Flex.Item>
+            <Flex.Item onClick={this.url.bind(this,"/classify/bean")}>
               <img src={require("../../assets/image/part-food.png")} alt=""/>
               <p>食品</p>
               </Flex.Item>
-            <Flex.Item>
+            <Flex.Item onClick={this.url.bind(this,"/classify/cookie")}>
               <img src={require("../../assets/image/part-diginal.png")} alt=""/>
               <p>数码产品</p>
             </Flex.Item>
-            <Flex.Item>
+            <Flex.Item onClick={this.url.bind(this,"/classify/bottle")}>
               <img src={require("../../assets/image/part-live.png")} alt=""/>
               <p>生活用品</p>
             </Flex.Item>

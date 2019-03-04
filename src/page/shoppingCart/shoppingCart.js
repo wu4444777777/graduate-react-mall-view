@@ -115,10 +115,6 @@ class shoppingCart extends Component{
   }
   render() {
     let { cartList, emptyCart,proNum, singleCheck} = this.state
-    // console.log("总额",totalPrice)
-    console.log("singleCheck",singleCheck)
-    console.log("数量",proNum)
-    // console.log("单个总价",totalPriceList)
     return(
       <div className="shoppingCart">
         <NavBar
@@ -162,7 +158,11 @@ class shoppingCart extends Component{
                 </div>
               </CheckboxItem>
             )):
-          <div>{emptyCart}</div>
+            <div className="empty">
+              <img src={require("../../assets/image/empty_cart.png")} alt=""/>
+              <div className="tip">{emptyCart}</div>
+              <button>再逛逛</button>
+          </div>
           }
         </div>
         <div className="allcount">

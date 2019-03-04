@@ -41,7 +41,6 @@ class personalCenter extends Component {
           this.setState({
             userInfo: data
           })
-          console.log("data===>",data)
         })
       }
     }else{
@@ -79,7 +78,7 @@ class personalCenter extends Component {
         <div className="myOrder">
           <div className="title">
             <span>我的订单</span>
-            <span>查看更多</span>
+            <span onClick={this.url.bind(this,"/orderList")}>查看更多</span>
           </div>
           <div className="nav">
             <Grid
@@ -89,6 +88,9 @@ class personalCenter extends Component {
         </div>
         <div className="nav-list">
           <div className="getProduction">管理收货地址</div>
+        </div>
+        <div className="nav-list">
+          <div className="getProduction" onClick={this.url.bind(this,"/mySave")}>我的收藏</div>
         </div>
         <BottomBar/>
       </div>

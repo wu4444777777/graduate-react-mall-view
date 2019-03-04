@@ -11,20 +11,9 @@ import shoppingCart from './page/shoppingCart/shoppingCart'
 import search from './page/search/search'
 import productDetail from './page/productDetail/productDetail'
 import order from './page/order/order'
-// var routerList = [{
-//   path: '/',
-//   componentPath: home,
-//   title: '首页'
-// },
-// {
-//   path: '/personalCenter',
-//   componentPath: personalCenter,
-//   title: "个人中心"
-// }]
-
-// const setTitle = (title) => {
-//   document.title = title
-// };
+import classify from './page/classify/classify'
+import orderList from './page/orderList/orderList'
+import mySave from './page/mySave/mySave'
 
 class RouteConfig extends Component { 
   constructor(props,context) {
@@ -49,6 +38,9 @@ class RouteConfig extends Component {
           <Route path="/search" component={search}/>
           <Route path="/productDetail/:id" component={productDetail}/>
           <Route path="/order" component={order}/>
+          <Route path="/classify/:type" component={classify}/>
+          <Route path="/orderList" component={orderList}/>
+          <Route path="/mySave" component={mySave}/>
         </Switch>
       </HashRouter>
     )

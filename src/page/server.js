@@ -8,7 +8,8 @@ class API {
         loginout: false,
         formData: {
 
-        }
+        },
+        orderList: []
     }
 
     // 储存数据
@@ -80,6 +81,49 @@ class API {
     async deleteCartOne(params) {
       let { data } = await axios.get('http://localhost:4530/shoppingcart/deleteOne',params)
       
+      return data
+    }
+
+    @action
+    async getClassifyList(params) {
+      let { data } = await axios.get('http://localhost:4530/classify/classifyList',params)
+      return data
+    }
+
+    @action
+    async sendOrderList(params) {
+      let { data } = await axios.post('http://localhost:4530/order/insertOrderList',params) 
+      return data
+    }
+
+    @action
+    async getOrderList(){
+      let { data } = await axios.get('http://localhost:4530/order/getOrderList')
+
+      runInAction(()=>{
+        this.state.orderList = data.data 
+      })
+      return data
+    }
+
+    @action
+    async searchOrder(params){
+      let { data } = await axios.get('http://localhost:4530/order/searchOrder',params)
+
+      return data
+    }
+
+    @action
+    async getSaveList() {
+      let { data } = await axios.get('http://localhost:4530/save/getSaveList')
+
+      return data
+    }
+
+    @action
+    async deleteSaveProduct(params) {
+      let { data } = await axios.get('http://localhost:4530/save/deleteSaveOne',params)
+
       return data
     }
 }
