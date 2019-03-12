@@ -33,7 +33,6 @@ class home extends Component {
         loginStatus: 0
       })
     }
-    console.log("首页",this.props)
   }
 
   url(path) {
@@ -51,7 +50,14 @@ class home extends Component {
       }
     })
   }
-
+  checkIsLogin(){
+    let userFlag = localStorage.getItem("userFlag")
+    if(userFlag == 1){
+      this.url("/accountManage")
+    }else{
+      this.url("/login")
+    }
+  }
   render() {
     let { carouselImg } = this.state
     let { product } = toJS(API.state)
@@ -62,9 +68,11 @@ class home extends Component {
             <img src={require('../../assets/image/logo.png')} alt=""/>
           </div>
           <div className="searchBox">
-            <input className="searchIpt" type="text"/>
+            <input className="searchIpt" type="text" 
+              onFocus={this.url.bind(this,"/search")}  
+            />
           </div>
-          <div className="user">
+          <div className="user" onClick={this.checkIsLogin.bind(this)}>
             <img src={require("../../assets/image/user.svg")} alt=""/>
           </div>
         </div> 
@@ -125,7 +133,7 @@ class home extends Component {
               product && product.length>0 && product.map((item,index) => (
                 <div className="hr-detail" key={index}>
                   <div className="product-img" onClick={()=>{this.url("/productDetail/"+item.id)}}>
-                    <img src={require("../../assets/image/"+item.image)} alt=""/>
+                    <img src={require("../../assets/image/"+item.imageUrl)} alt=""/>
                   </div>
                   <div className="name" onClick={()=>{this.url("/productDetail/"+item.id)}}>{item.name}</div>
                   <div className="pd-price">

@@ -42,25 +42,33 @@ class bottomBar extends Component {
         <Flex>
           <Flex.Item>
             <Link to='/'>
-              <img src={require("../../../assets/image/home.png")} alt=""/>
+              <div className="img">
+                <img src={require("../../../assets/image/home.png")} alt=""/>
+              </div>
               <p>首页</p>
             </Link>
           </Flex.Item>
           <Flex.Item>
             <Link to='/search'>
-              <img src={require("../../../assets/image/search.png")} alt=""/>
+              <div className="img">
+                <img src={require("../../../assets/image/search.png")} alt=""/>
+              </div>
               <p>搜索</p>
             </Link>
           </Flex.Item>
           <Flex.Item>
             <Link to='/shoppingCart'>
-              <img src={require("../../../assets/image/shoppingCart.png")} alt=""/>
+              <div className="img">
+                <img src={require("../../../assets/image/shoppingCart.png")} alt=""/>
+              </div>
               <p>购物车</p>
             </Link>
           </Flex.Item>
           <Flex.Item>
             <Link to='/personalCenter' onClick={this.checkIsLogin.bind(this)}>
-              <img src={require("../../../assets/image/my.png")} alt=""/>
+              <div className="img">
+                <img src={require("../../../assets/image/my.png")} alt=""/>
+              </div>
               <p>我的</p>
             </Link>
           </Flex.Item>

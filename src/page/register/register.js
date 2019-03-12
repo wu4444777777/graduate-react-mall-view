@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import API from '../server'
 import { Toast } from 'antd-mobile'
+import util from '../../utils/index'
 import './register.less'
 
 @observer
@@ -40,8 +41,12 @@ class register extends Component {
   }
   
   submitData() {
+    let registerDate = util.formatNowTime(0)
+    let userToken =  this.state.formData.phone + util.formatNowTime(1)
+    console.log("registerDate===>",registerDate)
+    console.log("userToken",userToken)
     API.setRegisterData({
-      ...this.state.formData
+      ...this.state.formData,registerDate,userToken
     }).then((data)=>{
       if(data.resultCode === 0) {
         Toast.success(data.resultMsg,5,()=>{

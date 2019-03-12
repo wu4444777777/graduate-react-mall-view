@@ -41,6 +41,7 @@ class orderList extends Component{
       }
     })
   }
+  
   render() {
     let { tabs, orderList } = this.state
     return(
@@ -73,7 +74,7 @@ class orderList extends Component{
                 <div className="product-list" key={index}>
                   <div className="proList">
                     <div className="pro-img">
-                      <img src={require("../../assets/image/"+item.image)} alt=""/>
+                      <img src={require("../../assets/image/"+item.imageUrl)} alt=""/>
                     </div>
                     <div className="intro">
                       <div id="name">{item.productName}</div>
@@ -94,10 +95,10 @@ class orderList extends Component{
               }
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
-              Content of second tab
+              未有该订单
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
-              Content of third tab
+            未有该订单
             </div>
           </Tabs>
 					</div>

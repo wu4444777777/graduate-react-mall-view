@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { NavBar, Icon } from 'antd-mobile'
+import { NavBar, Icon, Modal, Toast } from 'antd-mobile'
 import API from '../server'
+import util from '../../utils/index'
 // import BottomBar from '../common/bottomBar/bottomBar'
 import './accountManage.less'
+const prompt = Modal.prompt;
+const alert = Modal.alert;
 
 @observer
 class accountManage extends Component {
@@ -17,6 +20,7 @@ class accountManage extends Component {
   componentWillMount() {
     document.title = "账号管理"
     let userphone = localStorage.getItem("userInfo")
+    console.log("this.props",this.props)
     if(userphone) {
       API.getUserInfo({
         params: {
@@ -29,11 +33,42 @@ class accountManage extends Component {
       })
     }
   }
+  url(path){
+    this.props.history.push(path)
+  }
 
   loginOut() {
     localStorage.removeItem("userInfo")
     localStorage.setItem("userFlag","0")
-    this.props.history.push("/login")
+    this.url("/login")
+  }
+
+  updateUserInfo(name,value){
+    Toast.loading("Loading",999)
+    API.updateUserInfo({
+      editName: name,
+      editValue: value,
+      userToken: localStorage.getItem("userToken")
+    }).then(data => {
+      Toast.hide()
+      if(data.resultCode == 0) {
+        this.setState({
+          userInfo: data.data
+        })
+        Toast.success("修改成功")
+      }else{
+        Toast.fail("修改失败")
+      }
+    })
+  }
+
+  openModal(name,paramName) {
+    alert(`绑定${name}`, `您确定要修改${name}？`, [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确认', onPress: () => prompt(
+        `修改${name}`,'请填写清楚',email => this.updateUserInfo(paramName,email)
+      )},
+    ])
   }
 
   render(){
@@ -56,28 +91,28 @@ class accountManage extends Component {
               <img src={require("../../assets/image/user.svg")} alt=""/>
             </div>
           </div>
-          <div className="nickName line">
+          <div className="nickName line" onClick={()=>this.openModal("昵称","username")}>
             <div className="title">昵称</div>
             <div className="info">{userInfo.username}</div>
           </div>
-          <div className="account line">
+          <div className="account line" onClick={()=>this.openModal("手机号","phone")}>
             <div className="title">手机号</div>
             <div className="info">{userInfo.phone}</div>
           </div>
-          <div className="password line">
+          <div className="password line" onClick={() => this.openModal("密码","password")}>
             <div className="title">修改密码</div>
-            <div>></div>
+            {/* <div>></div> */}
           </div>
-          <div className="line">
+          <div className="line" onClick={()  =>this.openModal("邮箱","email")}>
             <div className="title">绑定邮箱</div>
-            <div>></div>
+            <div>{userInfo.email}</div>
           </div>
-          <div className="line">
+          <div className="line" onClick={() => this.openModal("qq","qq")}>
             <div className="title">绑定qq</div>
-            <div>></div>
+            <div>{userInfo.qq}</div>
           </div>
         </div>
-        <div className="loginOut" onClick={this.loginOut}>退出当前账号</div>
+        <div className="loginOut" onClick={()=>this.loginOut()}>退出当前账号</div>
       </div>
     )
   }

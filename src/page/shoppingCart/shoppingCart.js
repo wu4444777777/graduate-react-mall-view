@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { NavBar, Icon, Checkbox } from 'antd-mobile';
+import { NavBar, Icon, Checkbox, Toast } from 'antd-mobile';
 import api from '../server'
 import './shoppingCart.less'
 const CheckboxItem = Checkbox.CheckboxItem;
@@ -19,8 +19,14 @@ class shoppingCart extends Component{
   }
 
   componentWillMount() {
+    document.title = "购物车"
     let { proNum, priceList, singleCheck, totalPriceList } = this.state
+    Toast.loading("Loading",999)
     api.getCartList().then(data => {
+      Toast.hide()
+      this.setState({
+        isLoadig: false
+      })
       if(data.resultCode == 0){
         data.data.map((item,index) => {
           proNum.push(item.num)
@@ -35,7 +41,7 @@ class shoppingCart extends Component{
           singleCheck,
           totalPriceList
         })
-      }else{
+      }else if(data.resultCode==1){
         this.setState({
           emptyCart: data.resultMsg
         })
@@ -63,13 +69,14 @@ class shoppingCart extends Component{
   }
 
   deleteIt(id) {
+    Toast.loading("loading...",999)
     let arr = []
-    console.log("data===>",id)
     api.deleteCartOne({
       params: {
         id
       }
     }).then(data => {
+      Toast.hide()
       if(data.resultCode == 0){
         data.data.map((item,index) => {
           arr.push(item.num)
@@ -111,8 +118,44 @@ class shoppingCart extends Component{
       }
     })
     api.setStoreData("orderListConfirm",orderList)
-    this.props.history.push("/order")
+    this.props.history.push("/confirmOrder")
   }
+
+  deleteMore() {
+    Toast.loading("loading...",999)
+    let { singleCheck, cartList } = this.state
+    let deleteArr = []
+    let deleteCheckIndex = []
+    singleCheck.map((item,index) =>{
+      if(item){
+        deleteArr.push(cartList[index].cartId)
+        deleteCheckIndex.push(index)
+      }
+    })
+    api.deleteMore({
+      params:{
+        deleteArr
+      }
+    }).then(data=>{
+      Toast.hide()
+      if(data.resultCode == 0){
+        deleteCheckIndex.map((item,index)=>{
+          delete singleCheck[item]
+        })
+        this.setState({
+          cartList: data.data,
+          singleCheck
+        })
+      }else{
+        Toast.fail(resultMsg)
+      }
+    })
+  }
+
+  url(path){
+    this.props.history.push(path)
+  }
+
   render() {
     let { cartList, emptyCart,proNum, singleCheck} = this.state
     return(
@@ -128,7 +171,7 @@ class shoppingCart extends Component{
         >购物车</NavBar>
         <div className="product-list">
           {
-            cartList && cartList.length> 0 ?cartList.map((item,index) => (
+            cartList && cartList.length> 0 && cartList.map((item,index) => (
               <CheckboxItem 
                 key={index} 
                 className="checkboxItem" 
@@ -157,12 +200,16 @@ class shoppingCart extends Component{
                   </div>
                 </div>
               </CheckboxItem>
-            )):
-            <div className="empty">
-              <img src={require("../../assets/image/empty_cart.png")} alt=""/>
-              <div className="tip">{emptyCart}</div>
-              <button>再逛逛</button>
-          </div>
+            ))
+          }
+          {
+            emptyCart && (
+              <div className="empty">
+                <img src={require("../../assets/image/empty_cart.png")} alt=""/>
+                <div className="tip">{emptyCart}</div>
+                <button onClick={this.url.bind(this,"/")}>再逛逛</button>
+              </div>
+            )
           }
         </div>
         <div className="allcount">
@@ -180,7 +227,7 @@ class shoppingCart extends Component{
             <span className="totalPrice">￥</span>
           </div> */}
           <div className="count-btn">
-            <button className="delete-btn">删除</button>
+            <button className="delete-btn" onClick={this.deleteMore.bind(this)}>删除</button>
             <button className="account" onClick={()=> this.confirmOrder()}>结算</button>
           </div>
         </div>

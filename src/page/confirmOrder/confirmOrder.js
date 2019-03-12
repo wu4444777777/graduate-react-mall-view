@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { NavBar, Icon, Toast } from 'antd-mobile'
 import api from '../server'
-import './order.less'
+import util from '../../utils/index'
+import './confirmOrder.less'
 import { toJS } from 'mobx';
 
 @observer
@@ -11,39 +12,63 @@ class order extends Component{
     super(props,context)
     this.state= {
       preData: [],
-      totalPrice: 0
+      totalPrice: 0,
+      address: {}
     }
   }
 
   componentWillMount() {
     document.title= "确认订单"
+    let goback = util.handleQueryUrl("goback")
     let { totalPrice } = this.state
-    let { orderListConfirm } = toJS(api.state)
+    let { orderListConfirm, address } = toJS(api.state)
+    if(goback == 'addressManage'){
+      this.setState({
+        address
+      })
+    }else{
+      api.getPriorAddress().then(data=>{
+        this.setState({
+          address: data.data
+        })
+      })
+    }
     orderListConfirm.map((item,index) =>{
       totalPrice += item.price*item.num
     })
     this.setState({
       preData: orderListConfirm ,
-      totalPrice
+      totalPrice,
     })
   }
 
   sendOrder() {
-    let { preData } = this.state
+    Toast.loading("Loading...",999)
+    let { preData, address } = this.state
     api.sendOrderList({
-      orderList: preData
+      orderList: preData,
+      username: address.username,
+      userphone: address.userphone,
+      address: address.province+ address.city+ address.district+ address.detailAddress,
+      userToken: address.userToken
     }).then(data=>{
+      Toast.hide()
       if(data.resultCode == 0){
         this.props.history.push("/orderList")
       }else{
-        Toast.loading()
+        Toast.info(data.resultMsg)
       }
     })
   }
 
+  url(path){
+    this.props.history.push(path)
+  }
+
   render() {
     let { orderListConfirm } = toJS(api.state)
-    let { totalPrice } = this.state
+    let { totalPrice, address } = this.state
+    console.log("address",address)
     return(
       <div className="order">
         <NavBar
@@ -51,20 +76,19 @@ class order extends Component{
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
           rightContent={[
-            // <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-            <Icon key="1" type="ellipsis" />,
+            <div key="edit" onClick={this.url.bind(this,"/addressManage?goback=confirmOrder")}>修改地址</div>
           ]}
         >确认订单</NavBar>
         <div className="address">
           <div className="userInfo-1">
-            <span className="people">收货人：小七</span>
-            <span className="phone">18148789170</span>
+            <span className="people">收货人：{address.username}</span>
+            <span className="phone">{address.userphone}</span>
           </div>
           <div className="userInfo-2">
             <span className="symbol">
               <img src={require("../../assets/image/address.svg")} alt=""/>
             </span>
-            <span className="get">收获地址：深圳龙岗宝南路</span>
+            <span className="get">收获地址：{address.province}{address.city}{address.district}{address.detailAddress}</span>
           </div>
           <div className="tip">收货不便时，可选择免费代收服务</div>
         </div>
@@ -97,7 +121,7 @@ class order extends Component{
           }
           <div className="count">
             <span>合计：
-              <span className="price">￥{totalPrice}</span>
+              <span className="price">￥{totalPrice.toFixed(2)}</span>
             </span>
             <button className="submit" onClick={this.sendOrder.bind(this)}>提交订单</button>
           </div>

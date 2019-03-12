@@ -24,6 +24,7 @@ class login extends Component {
         Toast.success(data.resultMsg,3,()=> {
           localStorage.setItem("userInfo", data.data.phone)
           localStorage.setItem("userFlag","1")
+          localStorage.setItem("userToken",data.data.userToken)
           this.props.history.push("/")
         })
       }else if(data.resultCode === 1) {

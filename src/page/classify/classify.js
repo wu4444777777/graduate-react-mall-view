@@ -26,6 +26,10 @@ class classify extends Component{
     })
   }
 
+  url(path){
+    this.props.history.push(path)
+  }
+
   render() {
     let { classifyList } = this.state
     return(
@@ -42,15 +46,16 @@ class classify extends Component{
         <div className="proTr">
           {
             classifyList.map((item,index) =>(
-              <div className="proMod" key={"classify"+index}>
-                <a href={"#/productDetail/"+item.id}>
-                  <img src={require("../../assets/image/"+item.image)} alt=""/>
-                </a>
-                <a href={"#/productDetail/"+item.id}>
-                  <span className="proName">{item.name}</span>
-                </a>
-                <span className="price">￥{item.price}</span>
-              </div>
+              <div className="hr-detail" key={index}>
+                  <div className="product-img" onClick={()=>{this.url("/productDetail/"+item.id)}}>
+                    <img src={require("../../assets/image/"+item.imageUrl)} alt=""/>
+                  </div>
+                  <div className="name" onClick={()=>{this.url("/productDetail/"+item.id)}}>{item.name}</div>
+                  <div className="pd-price">
+                    <p className="price">￥{item.price}</p>
+                    {/* <img src={require("../../assets/image/save.svg")} onClick={()=>this.saveProduct(item)} alt=""/> */}
+                  </div>
+                </div>
             ))
           }
         </div>

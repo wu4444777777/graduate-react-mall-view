@@ -20,7 +20,6 @@ class productDetail extends Component{
     API.getDetailData({params: {
       id: this.props.match.params.id
     }}).then((data)=>{
-      console.log("详情",data)
       this.setState({
         detail: data.data,
         cartNum: data.data.cartNum
@@ -44,14 +43,15 @@ class productDetail extends Component{
   }
 
   addCart(data) {
+    Toast.loading('Loading',999)
     let { proNum } = this.state
     API.addIntoCart({
       ...data,proNum
     }).then((res) => {
+      Toast.hide()
       this.setState({
         cartNum: res.data.cartNum
       })
-      console.log("res===>",res)
       if(res.resultCode == 0){
         Toast.success("加入购物车成功")
       }else{
@@ -59,9 +59,21 @@ class productDetail extends Component{
       }
     })
   }
+  confirmOrder() {
+    let { detail, proNum } = this.state
+    let detailObj = {}
+    Object.assign(detailObj,{ 
+      name: detail.name,
+      imageUrl: detail.imageUrl,
+      id: detail.id,
+      price: detail.price,
+      num: proNum
+    })
+    API.setStoreData("orderListConfirm",[detailObj])
+    this.props.history.push("/confirmOrder")
+  }
   render() {
     let { detail, proNum, cartNum } = this.state
-    console.log("proNum",proNum)
     return(
       <div className="productDetail">
         <NavBar
@@ -76,8 +88,8 @@ class productDetail extends Component{
         <div className="detail">
           <div className="product-img">
             { 
-              detail && detail.image && (
-                <img src={require(`../../assets/image/${detail.image}`)} alt=""/>
+              detail && detail.imageUrl && (
+                <img src={require(`../../assets/image/${detail.imageUrl}`)} alt=""/>
               )
             }
           </div>
@@ -127,13 +139,13 @@ class productDetail extends Component{
         </div>
         <div className="bottom-btn">
           <div className="btn-nav">
-            <img src={require("../../assets/image/store.svg")} alt=""/>
+            <img src={require("../../assets/image/store.svg")} alt="" onClick={()=> this.props.history.push("/")}/>
             <Badge text={cartNum}>
               <img src={require("../../assets/image/cart.svg")} onClick={()=> this.props.history.push("/shoppingCart")} alt=""/>
             </Badge>
           </div>
           <div className="addCart" onClick={this.addCart.bind(this,detail)}>加入购物车</div>
-          <div className="buy">立即购买</div>
+          <div className="buy" onClick={()=> this.confirmOrder()}>立即购买</div>
         </div>
       </div>
     )

@@ -126,6 +126,69 @@ class API {
 
       return data
     }
+
+    @action
+    async sendSearchProduct(params) {
+      let { data } = await axios.get('http://localhost:4530/search/searchProduct',params) 
+
+      return data
+    }
+
+    @action
+    async deleteMore(params) {
+      let { data } = await axios.get('http://localhost:4530/shoppingCart/deleteLots',params)
+
+      return data
+    }
+
+    @action
+    async addAddress(params) {
+      let { data } = await axios.post('http://localhost:4530/address/addORupdateAddress',params)
+      
+      return data
+    }
+
+    @action
+    async getAddress(params){
+      let { data } = await axios.get('http://localhost:4530/address/getAddress',params)
+
+      return data
+    }
+
+    @action
+    async getAddressList(params){
+      let { data } = await axios.get('http://localhost:4530/address/getAddressList',params)
+
+      return data
+    }
+
+    @action
+    async deleteAddress(params){
+      let { data } = await axios.get("http://localhost:4530/address/deleteAddress",params)
+
+      return data
+    }
+
+    @action
+    async getPriorAddress(){
+      let { data } = await axios.get('http://localhost:4530/address/getPriorAddress')
+
+      return data
+    }
+
+    @action
+    async getUserAddress(params){
+      let { data } = await axios.get('http://localhost:4530/address/getUserAddress',params)
+
+      return data
+    }
+
+    @action
+    async updateUserInfo(params){
+      let { data } = await axios.post('http://localhost:4530/user/updateUserInfo',params)
+
+      return data
+    }
 }
 
 const api = new API();

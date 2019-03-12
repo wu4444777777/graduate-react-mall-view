@@ -10,10 +10,12 @@ import register from './page/register/register'
 import shoppingCart from './page/shoppingCart/shoppingCart'
 import search from './page/search/search'
 import productDetail from './page/productDetail/productDetail'
-import order from './page/order/order'
+import confirmOrder from './page/confirmOrder/confirmOrder'
 import classify from './page/classify/classify'
 import orderList from './page/orderList/orderList'
 import mySave from './page/mySave/mySave'
+import addressManage from './page/addressManage/addressManage'
+import addAddress from './page/addAddress/addAddress'
 
 class RouteConfig extends Component { 
   constructor(props,context) {
@@ -37,10 +39,12 @@ class RouteConfig extends Component {
           <Route path="/shoppingCart" component={shoppingCart}/>
           <Route path="/search" component={search}/>
           <Route path="/productDetail/:id" component={productDetail}/>
-          <Route path="/order" component={order}/>
+          <Route path="/confirmOrder" component={confirmOrder}/>
           <Route path="/classify/:type" component={classify}/>
           <Route path="/orderList" component={orderList}/>
           <Route path="/mySave" component={mySave}/>
+          <Route path="/addressManage" component={addressManage}/>
+          <Route path="/addAddress" component={addAddress}/>
         </Switch>
       </HashRouter>
     )

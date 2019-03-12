@@ -40,7 +40,7 @@ class personalCenter extends Component {
         }).then(data => {
           this.setState({
             userInfo: data
-          })
+          }) 
         })
       }
     }else{
@@ -87,7 +87,7 @@ class personalCenter extends Component {
           </div>
         </div>
         <div className="nav-list">
-          <div className="getProduction">管理收货地址</div>
+          <div className="getProduction" onClick={this.url.bind(this,"/addressManage")}>管理收货地址</div>
         </div>
         <div className="nav-list">
           <div className="getProduction" onClick={this.url.bind(this,"/mySave")}>我的收藏</div>
