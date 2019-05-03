@@ -1,4 +1,23 @@
 .shoppingCart{
+  .am-navbar-left-icon{
+    width: 30%;
+    height: 100%;
+  }
+  .back{
+    width: 100%;
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url(../../assets/image/nav-back.png)
+  }
+  .home{
+    width: 30%;
+    height: 100%;
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url(../../assets/image/nav-home.png)
+  }
   .product-list{
     padding: 3%;
     box-sizing: border-box;
@@ -29,13 +48,26 @@
         width: 60%;
         margin-left: 10px;
         justify-content: space-between;
+        font-size: 12px;
         .pd-name{
           padding: 5px;
-          font-size: 14px;
+          white-space: normal;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          
         }
         .price{
           padding: 5px;
           color: red;
+        }
+        .classify{
+          span{
+            background: #f2f2f26b;
+            padding: 5px 10px;
+            color: #999;
+            border-radius: 25px;
+          }
         }
         .bottom{
           display: flex;
@@ -117,14 +149,14 @@
       }
     }
     .count-btn{
-      width: 72%;
+      width: 33%;
       display: flex;
       justify-content: flex-end;
       button{
-        width: 18%;
+        width: 75%;
         border: none;
         color: white;
-        padding: 2%;
+        padding: 7%;
         border-radius: 50px;
       }
       .delete-btn{

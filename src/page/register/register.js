@@ -24,6 +24,14 @@ class register extends Component {
   
   componentWillMount() {
     document.title= "注册"
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+      // window.location.reload(true)
+    }else{
+      document.body.style.fontSize= "13px"
+      // window.location.reload(true)
+    }
   }
 
   setFormData(name,value) {
@@ -41,13 +49,15 @@ class register extends Component {
   }
   
   submitData() {
-    let registerDate = util.formatNowTime(0)
+    Toast.loading("加载中...",999)
+    let registerDate = util.formatNowTime(0).split(" ")[0]
     let userToken =  this.state.formData.phone + util.formatNowTime(1)
     console.log("registerDate===>",registerDate)
     console.log("userToken",userToken)
     API.setRegisterData({
       ...this.state.formData,registerDate,userToken
     }).then((data)=>{
+      Toast.hide()
       if(data.resultCode === 0) {
         Toast.success(data.resultMsg,5,()=>{
           this.url("/login")

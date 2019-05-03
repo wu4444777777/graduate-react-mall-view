@@ -19,18 +19,24 @@ class addressManage extends Component{
       city: "",
       district: ""
     }
-    this.id = util.handleQueryUrl("id")
+    this.id = util.handleQueryUrl("id") 
+    this.goback= util.handleQueryUrl("goback")
   }
 
   componentWillMount() {
     let { selectedArea } = this.state
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+    }else{
+      document.body.style.fontSize= "14px"
+    }
     if(this.id){
       api.getAddress({
         params: {
           id: this.id
         }
       }).then(data => {
-        console.log("data",data)
         let item = data.data[0]
         if(item.province == item.city){
           selectedArea = item.city + item.district
@@ -83,7 +89,11 @@ class addressManage extends Component{
       Toast.hide()
       if(data.resultCode == 0){
         Toast.success(data.resultMsg,3,()=>{
-          this.props.history.push("/addressManage")
+          if(this.goback== "confirmOrder"){
+            this.props.history.push("/addressManage?goback=confirmOrder")
+          }else{
+            this.props.history.push("/addressManage")
+          }
         })
       }else{
         Toast.fail(data.resultMsg)
@@ -111,7 +121,6 @@ class addressManage extends Component{
   render(){
     const { getFieldProps } = this.props.form;
     let { selectedArea, addressDetail } = this.state
-    console.log("ssss",this.props.form.getFieldsValue())
     return (
       <div className="addAddress">
         <AddressPicker
@@ -121,7 +130,7 @@ class addressManage extends Component{
         />
         <NavBar
           mode="light"
-          icon={<Icon type="left" />}
+          icon={<div className="back" key="back"></div>}
           onLeftClick={() => this.props.history.goBack()}
           rightContent={[
             <div className="save" key="save" onClick={this.save.bind(this,this.props.form.getFieldsValue())}>保存</div>

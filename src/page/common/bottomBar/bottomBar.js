@@ -15,6 +15,10 @@ class bottomBar extends Component {
 
   componentWillMount(){
     let userFlag = localStorage.getItem("userFlag")
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+    }
     if(userFlag == 1){
       this.setState({
         loginStatus: 1

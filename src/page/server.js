@@ -71,8 +71,8 @@ class API {
     }
 
     @action
-    async getCartList() {
-      let { data } = await axios.get('http://localhost:4530/shoppingCart/getCartList')
+    async getCartList(params) {
+      let { data } = await axios.get('http://localhost:4530/shoppingCart/getCartList',params)
 
       return data
     }
@@ -97,8 +97,8 @@ class API {
     }
 
     @action
-    async getOrderList(){
-      let { data } = await axios.get('http://localhost:4530/order/getOrderList')
+    async getOrderList(params){
+      let { data } = await axios.get('http://localhost:4530/order/getOrderList',params)
 
       runInAction(()=>{
         this.state.orderList = data.data 
@@ -170,8 +170,8 @@ class API {
     }
 
     @action
-    async getPriorAddress(){
-      let { data } = await axios.get('http://localhost:4530/address/getPriorAddress')
+    async getPriorAddress(params){
+      let { data } = await axios.get('http://localhost:4530/address/getPriorAddress',params)
 
       return data
     }
@@ -187,6 +187,18 @@ class API {
     async updateUserInfo(params){
       let { data } = await axios.post('http://localhost:4530/user/updateUserInfo',params)
 
+      return data
+    }
+
+    @action
+    async setOrderStatus(params){
+      let { data } = await axios.post('http://localhost:4530/order/setOrderStatus',params)
+      return data
+    }
+
+    @action
+    async updateCartNum(params){
+      let { data } = await axios.get('http://localhost:4530/shoppingCart/updateCartNum',params)
       return data
     }
 }

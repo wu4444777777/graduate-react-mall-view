@@ -5,7 +5,6 @@ import api from '../server'
 import util from '../../utils/index'
 import './addressManage.less'
 import { toJS } from 'mobx';
-const CheckboxItem = Checkbox.CheckboxItem;
 const RadioItem = Radio.RadioItem;
 
 
@@ -19,11 +18,23 @@ class addressManage extends Component{
       checkedAddress: {},
       value: 0
     }
+    this.goback = util.handleQueryUrl("goback")
   }
 
   componentWillMount(){
-    let goback = util.handleQueryUrl("goback")
-    if(goback == 'confirmOrder'){
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+      this.setState({
+        fontsize: localStorage.getItem("fontsize")
+      })
+    }else{
+      document.body.style.fontSize= "13px"
+      this.setState({
+        fontsize: "13px"
+      })
+    }
+    if(this.goback == 'confirmOrder'){
       this.setState({
         type: 1
       })
@@ -38,19 +49,25 @@ class addressManage extends Component{
       }
     }).then(data =>{
       this.setState({
-        addressList: data.data
+        addressList: data.data,
+        checkedAddress: data.data[0]
       })
     })
   }
 
   edit(id){
-    this.props.history.push("/addAddress?id="+id)
+    if(this.goback == "confirmOrder"){
+      this.props.history.push("/addAddress?goback=confirmOrder&id="+id)
+    }else{
+      this.props.history.push("/addAddress?id="+id)
+    }
   }
 
   deleteAddress(id){
     api.deleteAddress({
       params: {
-        id
+        id,
+        userToken: localStorage.getItem("userToken")
       }
     }).then(data => {
       if(data.resultCode == 0){
@@ -62,16 +79,22 @@ class addressManage extends Component{
   }
 
   addNewAddress(){
-    this.props.history.push("/addAddress")
+    if(this.goback == 'confirmOrder'){
+      this.props.history.push("/addAddress?goback=confirmOrder")
+    }else{
+      this.props.history.push("/addAddress")
+    }
   }
   
   changeCheck(e,item,index){
     let { checkedAddress } = this.state
+    console.log("选中",e.target.checked)
     if(e.target.checked){
       checkedAddress = item
     }else{
       checkedAddress = {}
     }
+    console.log("checkedAddress",checkedAddress)
     this.setState({
       checkedAddress,
       value: index
@@ -98,12 +121,12 @@ class addressManage extends Component{
   };
 
   render(){
-    let { addressList, type, value } = this.state
+    let { addressList, type, value, fontsize } = this.state
     return (
       <div className="addressName">
         <NavBar
           mode="light"
-          icon={<Icon type="left" />}
+          icon={<div className="back" key="back"></div>}
           onLeftClick={() => this.props.history.goBack()}
           rightContent={[
             <div className="addNewAddress" key="add" onClick={this.addNewAddress.bind(this)}>新增地址</div>
@@ -116,7 +139,7 @@ class addressManage extends Component{
                 addressList.map((item,index) => (
                   <div className="address-detail" key={index}>
                     <div className="xing">
-                      <div><span>{item.username.substring(0,1)}</span></div>
+                      <div><span>{item.username && item.username.substring(0,1)}</span></div>
                     </div>
                     <div className="user-content">
                       <div className="userInfo">
@@ -149,9 +172,9 @@ class addressManage extends Component{
               {
                 addressList.map((item,index) => (
                   <RadioItem key={index} key={index} checked={value === index} onChange={(e) => this.changeCheck(e,item,index)}>
-                    <div className="address-detail" key={index}>
+                    <div className="address-detail" key={index} style={{fontSize: fontsize}}>
                       <div className="xing">
-                        <div><span>{item.username.substring(0,1)}</span></div>
+                        <div><span>{item.username && item.username.substring(0,1)}</span></div>
                       </div>
                       <div className="user-content">
                         <div className="userInfo">

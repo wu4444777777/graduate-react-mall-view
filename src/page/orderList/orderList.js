@@ -11,15 +11,36 @@ class orderList extends Component{
     super(props,context)
     this.state= {
       tabs: [
-        { title: '已付款', sub: '1' },
-        { title: '待付款', sub: '2' },
-        { title: '待评价', sub: '3' },
-      ]
+        { title: '已付款', sub: '1', status: 101},
+        { title: '待付款', sub: '2', status: 102 },
+        // { title: '待评价', sub: '3' },
+      ],
     }
+    this.userToken = localStorage.getItem("userToken")
   }
 
   componentWillMount() {
-    api.getOrderList().then(data=>{
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+    }else{
+      document.body.style.fontSize= "14px"
+    }
+    if(location.hash.indexOf("?") != -1){
+      this.setState({
+        tabIndex: location.hash.split("?")[1].split("=")[1]
+      })
+    }else{
+      this.setState({
+        tabIndex: 0
+      })
+    }
+    api.getOrderList({
+      params: {
+        orderStatus: 101,
+        userToken: this.userToken
+      }
+    }).then(data=>{
       this.setState({
         orderList: data.data
       })
@@ -41,18 +62,30 @@ class orderList extends Component{
       }
     })
   }
+
+  getOrderLists(tab){
+    api.getOrderList({
+      params: {
+        orderStatus: tab.status,
+        userToken: this.userToken
+      }
+    }).then(data=>{
+      this.setState({
+        orderList: data.data
+      })
+    })
+  }
   
   render() {
-    let { tabs, orderList } = this.state
+    let { tabs, orderList, tabIndex } = this.state
     return(
       <div className="orderList">
         <NavBar
           mode="light"
-          icon={<Icon type="left" />}
+          icon={<div className="back" key="back"></div>}
           onLeftClick={() => this.props.history.goBack()}
           rightContent={[
-            // <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-            <Icon key="1" type="ellipsis" />,
+          <div className="home" key="home" onClick={()=> this.props.history.push("/home")}></div>
           ]}
         >我的订单</NavBar>
         <div className='searchBox' >
@@ -64,17 +97,48 @@ class orderList extends Component{
         <div className='mo_orderBox'>
 					<div>
           <Tabs tabs={tabs}
-            initialPage={0}
+            initialPage={parseInt(tabIndex)}
             onChange={(tab, index) => { console.log('onChange', index, tab); }}
-            onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+            onTabClick={(tab, index) => this.getOrderLists(tab)}
           >
             <div>
               {
-               orderList && orderList.length> 0 && orderList.map((item,index) =>(
+               orderList && orderList.length> 0 ? orderList.map((item,index) =>(
                 <div className="product-list" key={index}>
                   <div className="proList">
                     <div className="pro-img">
-                      <img src={require("../../assets/image/"+item.imageUrl)} alt=""/>
+                      <img src={item.imageUrl} alt=""/>
+                    </div>
+                    <div className="intro">
+                      <div id="name">{item.productName}</div>
+                      <div className="classify">
+                        <span>{item.styles.split(",")[0]+";"+item.styles.split(",")[1]}</span>
+                      </div>
+                      <div id="price">
+                        <div className="price">￥{item.price}</div>
+                        <div id="num">x{item.num}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="account">
+                    <span id="sumNum">共{item.num}件商品</span>
+                    <span id="sum">小计：
+                      <span className="price">￥{item.num*item.price}</span>
+                    </span>
+                  </div>
+                </div>
+                )):<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
+                未有该订单
+                </div>
+              }
+            </div>
+            <div >
+              {
+               orderList && orderList.length> 0 ? orderList.map((item,index) =>(
+                <div className="product-list" key={index}>
+                  <div className="proList">
+                    <div className="pro-img">
+                      <img src={item.imageUrl} alt=""/>
                     </div>
                     <div className="intro">
                       <div id="name">{item.productName}</div>
@@ -91,11 +155,10 @@ class orderList extends Component{
                     </span>
                   </div>
                 </div>
-                ))
+                )):<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
+                未有该订单
+                </div>
               }
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
-              未有该订单
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}>
             未有该订单

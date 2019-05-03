@@ -19,6 +19,12 @@ class accountManage extends Component {
 
   componentWillMount() {
     document.title = "账号管理"
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+    }else{
+      document.body.style.fontSize= "14px"
+    }
     let userphone = localStorage.getItem("userInfo")
     console.log("this.props",this.props)
     if(userphone) {
@@ -39,6 +45,8 @@ class accountManage extends Component {
 
   loginOut() {
     localStorage.removeItem("userInfo")
+    localStorage.removeItem("userToken")
+    localStorage.removeItem("mallModel")
     localStorage.setItem("userFlag","0")
     this.url("/login")
   }
@@ -77,18 +85,17 @@ class accountManage extends Component {
       <div className="account-manage">
          <NavBar
           mode="light"
-          icon={<Icon type="left" />}
+          icon={<div className="back" key="back"></div>}
           onLeftClick={() => this.props.history.goBack()}
           rightContent={[
-            <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-            <Icon key="1" type="ellipsis" />,
+          <div className="home" key="home" onClick={()=> this.props.history.push("/home")}></div>
           ]}
         >账号设置</NavBar>
         <div className="account-detail">
           <div className="avactor line">
             <div className="title">头像</div>
             <div className="touxiang">
-              <img src={require("../../assets/image/user.svg")} alt=""/>
+              <img src={require("../../assets/image/user.jpg")} alt=""/>
             </div>
           </div>
           <div className="nickName line" onClick={()=>this.openModal("昵称","username")}>

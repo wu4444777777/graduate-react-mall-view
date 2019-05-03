@@ -1,4 +1,8 @@
+
 .home{
+  .am-modal-header {
+    padding: 0;
+}
   .nav-bar{
     display: flex;
     width: 100%;
@@ -54,21 +58,23 @@
       }
       p{
         margin: 0 0 10px;
-        font-size: 12px;
+        // font-size: 0.6rem;
         color: #333;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
   }
   .hot-recommend{
     margin-bottom: 50px;
     .hr-title{
-      background: lightpink;
       padding: 10px;
       text-align: center;
       background-image: url(https://static.fordgo.com/activity/home/title_bg.png);
       background-size: 100% 100%;
       color: #FD5C0E;
-      font-size: 0.7rem;
+      // font-size: 0.7rem;
     }
     .hr-list{
       padding: 10px;
@@ -92,7 +98,7 @@
         .name{
           padding: 0 10px;
           font-weight: bold;
-          font-size: 12px;
+          // font-size: 0.6rem;
           color: #4A4A4A;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -109,6 +115,7 @@
           .price{
             color: red;
             margin: 0;
+            // font-size: 0.6rem;
           }
           img{
             width: 25%;

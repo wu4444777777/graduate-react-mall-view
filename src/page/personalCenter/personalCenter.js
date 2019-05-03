@@ -12,17 +12,19 @@ class personalCenter extends Component {
     this.state = {
       iconData: [
         {
-          icon: require("../../assets/image/home.png"),
-          text: "待付款"
+          icon: require("../../assets/image/no-pay.png"),
+          text: "待付款",
+          path: "/orderList?status=0"
         },
         {
-          icon: require("../../assets/image/home.png"),
-          text: "待发货"
+          icon: require("../../assets/image/pay.png"),
+          text: "已付款",
+          path: "/orderList?status=1"
         },
-        {
-          icon: require("../../assets/image/home.png"),
-          text: "待收货"
-        }
+        // {
+        //   icon: require("../../assets/image/no-comment.png"),
+        //   text: "待评价"
+        // }
       ]
     }
   }
@@ -31,6 +33,12 @@ class personalCenter extends Component {
     document.title = "个人中心"
     let userFlag = localStorage.getItem("userFlag")
     let userphone = localStorage.getItem("userInfo")
+    if(localStorage.getItem("fontsize")){
+      let em = localStorage.getItem("fontsize")
+      document.body.style.fontSize= em
+    }else{
+      document.body.style.fontSize= "14px"
+    }
     if(userFlag == 1) {
       if(userphone) {
         API.getUserInfo({
@@ -64,13 +72,17 @@ class personalCenter extends Component {
       })
     }
   }
+
+  urlPage(e,i){
+    this.props.history.push(e.path)
+  }
   render() {
     let { iconData, userInfo } = this.state
     return (
       <div className="personalCenter">
         <div className="user">
             <div className="user-logo" onClick={()=>{this.checkIsLogin()}}>
-              <img src={require("../../assets/image/user.svg")} alt=""/>
+              <img src={require("../../assets/image/user.jpg")} alt=""/>
             </div>
            <div className="nickName">{userInfo && userInfo.username}</div>
            <div className="account">{userInfo && userInfo.phone}</div>
@@ -83,6 +95,7 @@ class personalCenter extends Component {
           <div className="nav">
             <Grid
               data= {iconData} 
+              onClick= {(e,i) =>this.urlPage(e,i)}
             />
           </div>
         </div>
